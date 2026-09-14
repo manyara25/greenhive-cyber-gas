@@ -19,7 +19,7 @@ function AdminLogin() {
 
     try {
       const response = await fetch(
-        "/.netlify/functions/api/admin/login",
+        "/api/admin/login",
         {
           method: "POST",
           headers: {
