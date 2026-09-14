@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+ca.pem
+greenhive_backup.sql
