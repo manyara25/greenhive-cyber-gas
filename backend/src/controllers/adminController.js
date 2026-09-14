@@ -1,0 +1,79 @@
+require("dotenv").config();
+
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const mysql = require("mysql2/promise");
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT),
+});
+
+const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "Username and password are required",
+      });
+    }
+
+    const [rows] = await pool.execute(
+      "SELECT * FROM admins WHERE username = ?",
+      [username]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({
+        message: "Invalid username or password",
+      });
+    }
+
+    const admin = rows[0];
+
+    const passwordMatches = await bcrypt.compare(
+      password,
+      admin.password_hash
+    );
+
+    if (!passwordMatches) {
+      return res.status(401).json({
+        message: "Invalid username or password",
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        adminId: admin.id,
+        username: admin.username,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "8h",
+      }
+    );
+
+    res.json({
+      message: "Login successful",
+      token,
+      admin: {
+        id: admin.id,
+        username: admin.username,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Login failed",
+    });
+  }
+};
+
+module.exports = {
+  login,
+};
