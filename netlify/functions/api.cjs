@@ -178,9 +178,9 @@ exports.handler = async (event) => {
   } catch (error) {
     console.error(error);
 
-    return response(500, {
-      message: "Server error",
-    });
+  return response(500, {
+  message: error.message,
+});
   }
 };
 
