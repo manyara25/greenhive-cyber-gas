@@ -39,7 +39,7 @@ const [statusFilter, setStatusFilter] = useState("All");
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/requests",
+        "/api/requests",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ const [statusFilter, setStatusFilter] = useState("All");
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/requests/${id}`,
+        `/api/requests/${id}`,
         {
           method: "PATCH",
           headers: {
