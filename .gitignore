@@ -27,3 +27,15 @@ dist-ssr
 
 ca.pem
 greenhive_backup.sql
+
+# Environment variables
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Environment variables
+.env
+.env.*
+!.env.example
+backend/.env
